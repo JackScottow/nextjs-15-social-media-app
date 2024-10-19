@@ -1,10 +1,10 @@
 "use server";
 
+import { lucia } from "@/auth";
 import prisma from "@/lib/prisma";
 import { loginSchema, LoginValues } from "@/lib/validation";
-import { isRedirectError } from "next/dist/client/components/redirect";
 import { verify } from "@node-rs/argon2";
-import { lucia } from "@/auth";
+import { isRedirectError } from "next/dist/client/components/redirect";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -24,7 +24,9 @@ export async function login(
     });
 
     if (!existingUser || !existingUser.passwordHash) {
-      return { error: "Incorrect username or password" };
+      return {
+        error: "Incorrect username or password",
+      };
     }
 
     const validPassword = await verify(existingUser.passwordHash, password, {
@@ -51,9 +53,9 @@ export async function login(
     return redirect("/");
   } catch (error) {
     if (isRedirectError(error)) throw error;
-    console.log(error);
+    console.error(error);
     return {
-      error: "Something went wrong. PLease try again",
+      error: "Something went wrong. Please try again.",
     };
   }
 }
