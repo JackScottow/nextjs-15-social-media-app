@@ -1,15 +1,17 @@
 import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
-import prisma from "./lib/prisma";
 import { Lucia, Session, User } from "lucia";
-import { cache } from "react";
 import { cookies } from "next/headers";
+import { cache } from "react";
+import prisma from "./lib/prisma";
 
 const adapter = new PrismaAdapter(prisma.session, prisma.user);
 
 export const lucia = new Lucia(adapter, {
   sessionCookie: {
     expires: false,
-    attributes: { secure: process.env.NODE_ENV === "production" },
+    attributes: {
+      secure: process.env.NODE_ENV === "production",
+    },
   },
   getUserAttributes(databaseUserAttributes) {
     return {
@@ -44,7 +46,10 @@ export const validateRequest = cache(
     const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
 
     if (!sessionId) {
-      return { user: null, session: null };
+      return {
+        user: null,
+        session: null,
+      };
     }
 
     const result = await lucia.validateSession(sessionId);
@@ -67,6 +72,7 @@ export const validateRequest = cache(
         );
       }
     } catch {}
+
     return result;
   },
 );
