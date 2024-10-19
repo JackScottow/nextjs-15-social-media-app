@@ -4,7 +4,7 @@ const requiredString = z.string().trim().min(1, "Required");
 
 export const signUpSchema = z.object({
   email: requiredString.email("Invalid email"),
-  userName: requiredString.regex(/^[a-zA-Z0-9]+$/, "Only letters & numbers"),
+  username: requiredString.regex(/^[a-zA-Z0-9]+$/, "Only letters & numbers"),
   password: requiredString.min(8, "Must be atleast 8 characters"),
 });
 
