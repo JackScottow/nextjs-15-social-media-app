@@ -1,8 +1,7 @@
 "use client";
 
-import { signUpSchema, SignUpValues } from "@/lib/validation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import LoadingButton from "@/components/LoadingButton";
+import { PasswordInput } from "@/components/PasswordInput";
 import {
   Form,
   FormControl,
@@ -12,13 +11,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { signUpSchema, SignUpValues } from "@/lib/validation";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
+import { useForm } from "react-hook-form";
 import { signUp } from "./actions";
-import { PasswordInput } from "@/components/PasswordInput";
-import LoadingButton from "@/components/LoadingButton";
 
-const SignUpForm = () => {
+export default function SignUpForm() {
   const [error, setError] = useState<string>();
 
   const [isPending, startTransition] = useTransition();
@@ -51,7 +50,7 @@ const SignUpForm = () => {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder="Username" {...field}></Input>
+                <Input placeholder="Username" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -64,7 +63,7 @@ const SignUpForm = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="Email" type="email" {...field}></Input>
+                <Input placeholder="Email" type="email" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -84,10 +83,9 @@ const SignUpForm = () => {
           )}
         />
         <LoadingButton loading={isPending} type="submit" className="w-full">
-          Create Account
+          Create account
         </LoadingButton>
       </form>
     </Form>
   );
-};
-export default SignUpForm;
+}
