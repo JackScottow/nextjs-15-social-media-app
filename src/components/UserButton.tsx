@@ -6,13 +6,17 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import UserAvatar from "./UserAvatar";
 import Link from "next/link";
-import { LogOutIcon, UserIcon } from "lucide-react";
+import { LogOutIcon, Monitor, Moon, Sun, UserIcon } from "lucide-react";
 import { logout } from "@/app/(auth)/actions";
 import { cn } from "@/lib/utils";
+import { useTheme } from "next-themes";
+import { Button } from "./ui/button";
 
 interface UserButtonProps {
   className?: string;
@@ -20,6 +24,9 @@ interface UserButtonProps {
 
 const UserButton = ({ className }: UserButtonProps) => {
   const { user } = useSession();
+
+  const { theme, setTheme } = useTheme();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -29,14 +36,37 @@ const UserButton = ({ className }: UserButtonProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>Logged in as @{user.username}</DropdownMenuLabel>
+
         <DropdownMenuSeparator />
+
         <Link href={`/users/${user.username}`}>
           <DropdownMenuItem className="cursor-pointer">
             <UserIcon className="mr-2 size-4" />
             Profile
           </DropdownMenuItem>
         </Link>
+
         <DropdownMenuSeparator />
+
+        <DropdownMenuItem
+          onSelect={() => setTheme(theme === "dark" ? "light" : "dark")}
+          className="cursor-pointer"
+        >
+          {theme === "dark" ? (
+            <>
+              <Sun className="mr-2 size-4" />
+              Light Mode
+            </>
+          ) : (
+            <>
+              <Moon className="mr-2 size-4" />
+              Dark Mode
+            </>
+          )}
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator />
+
         <DropdownMenuItem
           onClick={() => {
             logout();
