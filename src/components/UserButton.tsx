@@ -34,13 +34,13 @@ const UserButton = ({ className }: UserButtonProps) => {
           <UserAvatar avatarUrl={user.avatarUrl} size={40}></UserAvatar>
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent className="bg-card">
         <DropdownMenuLabel>Logged in as @{user.username}</DropdownMenuLabel>
 
         <DropdownMenuSeparator />
 
         <Link href={`/users/${user.username}`}>
-          <DropdownMenuItem className="cursor-pointer">
+          <DropdownMenuItem className="cursor-pointer hover:bg-background">
             <UserIcon className="mr-2 size-4" />
             Profile
           </DropdownMenuItem>
@@ -50,7 +50,7 @@ const UserButton = ({ className }: UserButtonProps) => {
 
         <DropdownMenuItem
           onSelect={() => setTheme(theme === "dark" ? "light" : "dark")}
-          className="cursor-pointer"
+          className="cursor-pointer hover:bg-background"
         >
           {theme === "dark" ? (
             <>
@@ -71,7 +71,7 @@ const UserButton = ({ className }: UserButtonProps) => {
           onClick={() => {
             logout();
           }}
-          className="cursor-pointer"
+          className="cursor-pointer hover:bg-background"
         >
           <LogOutIcon className="mr-2 size-4" />
           Logout
