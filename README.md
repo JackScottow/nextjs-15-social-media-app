@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/create-next-app).
+# Next.js 15 Social Media App
 
-## Getting Started
+A social media application built using **Next.js 15**, featuring modern tools and libraries for a responsive and interactive user experience. This app utilizes powerful backend and frontend solutions to provide authentication, database integration, real-time updates, and a modern UI.
 
-First, run the development server:
+## Table of Contents
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- [Tech Stack](#tech-stack)
+- [Features](#features)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Frameworks and Libraries
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load Inter, a custom Google Font.
+- **[Next.js 15](https://nextjs.org/)**: A modern React framework for server-side rendering, static site generation, and building full-stack applications.
+- **[React 19](https://react.dev/)**: The latest version of the popular JavaScript library for building user interfaces.
+- **[React Hook Form](https://react-hook-form.com/)**: Simple and performant form management for React.
+- **[TanStack React Query](https://tanstack.com/query/v5)**: Powerful data-fetching and state management library.
+- **[Tailwind CSS](https://tailwindcss.com/)**: A utility-first CSS framework for styling.
+- **[Radix UI](https://www.radix-ui.com/)**: Headless UI components for accessibility and customization.
+- **[Tiptap](https://tiptap.dev/)**: A powerful, extensible text editor for modern web apps.
 
-## Learn More
+### Backend & Database
 
-To learn more about Next.js, take a look at the following resources:
+- **[Prisma](https://www.prisma.io/)**: An ORM (Object-Relational Mapper) for connecting to the database.
+- **[Lucia Auth](https://lucia-auth.com/)**: A modern authentication library.
+- **[UploadThing](https://uploadthing.com/)**: Simplified file uploads with an intuitive API.
+- **[Stream Chat](https://getstream.io/)**: Provides real-time chat functionality.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Utilities & Helpers
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **[Date-fns](https://date-fns.org/)**: A library for date manipulation and formatting.
+- **[clsx](https://github.com/lukeed/clsx)**: A utility for conditionally combining class names.
+- **[Zod](https://zod.dev/)**: A schema validation library for TypeScript.
 
-## Deploy on Vercel
+### Developer Tools
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **TypeScript**: Type-safe JavaScript for modern development.
+- **ESLint & Prettier**: Code quality and formatting tools.
+- **TailwindCSS Plugins**: Including `tailwindcss-animate` and `tailwind-merge` for enhanced styling.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Features
+
+- **User Authentication**: Secure user authentication using **Lucia Auth** and **Prisma**.
+- **Real-Time Chat**: Integrated real-time chat using **Stream Chat**.
+- **Rich Text Editing**: Feature-rich text editor with **Tiptap**.
+- **Responsive Design**: Modern and adaptive UI with **Tailwind CSS**.
+- **File Uploads**: Simplified image/file uploads with **UploadThing**.
+- **Accessibility**: Components powered by **Radix UI** for accessible interactions.
