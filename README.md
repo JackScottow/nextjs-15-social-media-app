@@ -2,6 +2,15 @@
 
 A social media application built using **Next.js 15**, featuring modern tools and libraries for a responsive and interactive user experience. This app utilizes powerful backend and frontend solutions to provide authentication, database integration, real-time updates, and a modern UI.
 
+## Features
+
+- **User Authentication**: Secure user authentication using **Lucia Auth** and **Prisma**.
+- **Real-Time Chat**: Integrated real-time chat using **Stream Chat**.
+- **Rich Text Editing**: Feature-rich text editor with **Tiptap**.
+- **Responsive Design**: Modern and adaptive UI with **Tailwind CSS**.
+- **File Uploads**: Simplified image/file uploads with **UploadThing**.
+- **Accessibility**: Components powered by **Radix UI** for accessible interactions.
+
 ## Table of Contents
 
 - [Tech Stack](#tech-stack)
@@ -37,12 +46,3 @@ A social media application built using **Next.js 15**, featuring modern tools an
 - **TypeScript**: Type-safe JavaScript for modern development.
 - **ESLint & Prettier**: Code quality and formatting tools.
 - **TailwindCSS Plugins**: Including `tailwindcss-animate` and `tailwind-merge` for enhanced styling.
-
-## Features
-
-- **User Authentication**: Secure user authentication using **Lucia Auth** and **Prisma**.
-- **Real-Time Chat**: Integrated real-time chat using **Stream Chat**.
-- **Rich Text Editing**: Feature-rich text editor with **Tiptap**.
-- **Responsive Design**: Modern and adaptive UI with **Tailwind CSS**.
-- **File Uploads**: Simplified image/file uploads with **UploadThing**.
-- **Accessibility**: Components powered by **Radix UI** for accessible interactions.
