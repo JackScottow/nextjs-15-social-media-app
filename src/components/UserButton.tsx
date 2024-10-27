@@ -17,6 +17,7 @@ import { logout } from "@/app/(auth)/actions";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
 import { Button } from "./ui/button";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface UserButtonProps {
   className?: string;
@@ -26,6 +27,8 @@ const UserButton = ({ className }: UserButtonProps) => {
   const { user } = useSession();
 
   const { theme, setTheme } = useTheme();
+
+  const queryClient = useQueryClient();
 
   return (
     <DropdownMenu>
@@ -69,6 +72,7 @@ const UserButton = ({ className }: UserButtonProps) => {
 
         <DropdownMenuItem
           onClick={() => {
+            queryClient.clear();
             logout();
           }}
           className="cursor-pointer hover:bg-background"

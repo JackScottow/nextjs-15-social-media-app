@@ -1,6 +1,6 @@
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { type ClassValue, clsx } from "clsx";
 import { formatDate, formatDistanceToNowStrict } from "date-fns";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -12,12 +12,13 @@ export function formatRelativeDate(from: Date) {
     return formatDistanceToNowStrict(from, { addSuffix: true });
   } else {
     if (currentDate.getFullYear() === from.getFullYear()) {
-      return formatDate(from, "d MMM ");
+      return formatDate(from, "MMM d");
     } else {
       return formatDate(from, "MMM d, yyyy");
     }
   }
 }
+
 export function formatNumber(n: number): string {
   return Intl.NumberFormat("en-US", {
     notation: "compact",
