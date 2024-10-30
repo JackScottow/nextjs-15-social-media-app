@@ -34,12 +34,12 @@ const Post = ({ post }: PostProps) => {
             </Link>
           </div>
         </div>
-        {post.user.id === user.id && (
-          <PostMoreButton
-            post={post}
-            className="opacity-0 transition-opacity group-hover/post:opacity-100"
-          />
-        )}
+
+        <PostMoreButton
+          owner={post.user.id === user.id}
+          post={post}
+          className="opacity-0 transition-opacity group-hover/post:opacity-100"
+        />
       </div>
       <div className="whitespace-pre-line break-words">{post.content}</div>
     </article>

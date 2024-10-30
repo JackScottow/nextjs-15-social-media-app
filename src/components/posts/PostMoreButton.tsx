@@ -13,9 +13,10 @@ import { MoreHorizontal, Trash2 } from "lucide-react";
 interface PostMoreButtonProps {
   post: PostData;
   className?: string;
+  owner: boolean;
 }
 
-const PostMoreButton = ({ post, className }: PostMoreButtonProps) => {
+const PostMoreButton = ({ post, className, owner }: PostMoreButtonProps) => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   return (
     <>
@@ -26,12 +27,15 @@ const PostMoreButton = ({ post, className }: PostMoreButtonProps) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem onClick={() => setShowDeleteDialog(true)}>
-            <span className="flex items-center gap-3 text-destructive">
-              <Trash2 className="size-4" />
-              Delete
-            </span>
-          </DropdownMenuItem>
+          <DropdownMenuItem>Share</DropdownMenuItem>
+          {owner && (
+            <DropdownMenuItem onClick={() => setShowDeleteDialog(true)}>
+              <span className="flex items-center gap-3 text-destructive">
+                <Trash2 className="size-4" />
+                Delete
+              </span>
+            </DropdownMenuItem>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
       <DeletePostDialog
