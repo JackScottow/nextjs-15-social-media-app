@@ -18,6 +18,23 @@ interface PostMoreButtonProps {
 
 const PostMoreButton = ({ post, className, owner }: PostMoreButtonProps) => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const handleShare = async () => {
+    // Check if the Web Share API is supported
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Check out this post!",
+          text: "I found this great post for you to read.",
+          url: window.location.href, // or any specific URL you want to share
+        });
+        console.log("Content shared successfully!");
+      } catch (error) {
+        console.error("Error sharing:", error);
+      }
+    } else {
+      console.warn("Web Share API is not supported in this browser.");
+    }
+  };
   return (
     <>
       <DropdownMenu>
@@ -27,7 +44,7 @@ const PostMoreButton = ({ post, className, owner }: PostMoreButtonProps) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem>Share</DropdownMenuItem>
+          <DropdownMenuItem onClick={handleShare}>Share</DropdownMenuItem>
           {owner && (
             <DropdownMenuItem onClick={() => setShowDeleteDialog(true)}>
               <span className="flex items-center gap-3 text-destructive">
