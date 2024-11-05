@@ -13,11 +13,11 @@ const Post = ({ post }: PostProps) => {
   const { user } = useSession();
 
   return (
-    <article className="group/post space-y-3 rounded-md bg-card p-5 shadow-sm">
+    <article className="group/post space-y-3 rounded-md bg-card p-3 shadow-sm">
       <div className="flex justify-between gap-3">
         <div className="flex flex-wrap gap-4">
           <Link href={`/users/${post.user.username}`}>
-            <UserAvatar avatarUrl={post.user.avatarUrl} className="hover:" />
+            <UserAvatar avatarUrl={post.user.avatarUrl} className="size-10" />
           </Link>
           <div>
             <Link

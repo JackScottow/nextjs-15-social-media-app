@@ -2,7 +2,6 @@ import PostEditor from "@/components/posts/editor/PostEditor";
 import Post from "@/components/posts/Post";
 import TrendingBar from "@/components/TrendingBar";
 import prisma from "@/lib/prisma";
-import { postDataInclude } from "@/lib/types";
 import ForYouFeed from "./ForYouFeed";
 
 export default function Home() {

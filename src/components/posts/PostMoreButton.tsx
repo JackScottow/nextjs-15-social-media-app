@@ -8,7 +8,14 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
-import { MoreHorizontal, Trash2 } from "lucide-react";
+import {
+  MoreHorizontal,
+  Share,
+  Share2,
+  Trash2,
+  UserPlus,
+  UserPlus2,
+} from "lucide-react";
 
 interface PostMoreButtonProps {
   post: PostData;
@@ -44,12 +51,34 @@ const PostMoreButton = ({ post, className, owner }: PostMoreButtonProps) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem onClick={handleShare}>Share</DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={handleShare}
+            className="cursor-pointer hover:bg-muted"
+          >
+            <span className="flex items-center gap-3">
+              <Share className="size-4" />
+              Share
+            </span>
+          </DropdownMenuItem>
           {owner && (
-            <DropdownMenuItem onClick={() => setShowDeleteDialog(true)}>
+            <DropdownMenuItem
+              onClick={() => setShowDeleteDialog(true)}
+              className="cursor-pointer hover:bg-muted"
+            >
               <span className="flex items-center gap-3 text-destructive">
                 <Trash2 className="size-4" />
                 Delete
+              </span>
+            </DropdownMenuItem>
+          )}
+          {!owner && (
+            <DropdownMenuItem
+              onClick={() => setShowDeleteDialog(true)}
+              className="cursor-pointer hover:bg-muted"
+            >
+              <span className="flex items-center gap-3">
+                <UserPlus2 className="size-4" />
+                Follow {post.user.displayName}
               </span>
             </DropdownMenuItem>
           )}
