@@ -1,7 +1,8 @@
 "use client";
+
 import { useSession } from "@/app/(main)/SessionProvider";
 import { FollowerInfo, UserData } from "@/lib/types";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useEffect, useState } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -18,14 +19,33 @@ interface UserTooltipProps extends PropsWithChildren {
   user: UserData;
 }
 
+// Hook to detect touch devices
+function useIsTouchDevice() {
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+  useEffect(() => {
+    setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
+  }, []);
+
+  return isTouchDevice;
+}
+
 const UserTooltip = ({ children, user }: UserTooltipProps) => {
   const { user: loggedInUser } = useSession();
+  const isTouchDevice = useIsTouchDevice(); // Use the hook here
+
+  // Conditionally render the tooltip on non-touch devices
+  if (isTouchDevice) {
+    return <>{children}</>;
+  }
+
   const followerState: FollowerInfo = {
     followers: user._count.followers,
     isFollowedByUser: !!user.followers.some(
       ({ followerId }) => followerId === loggedInUser.id,
     ),
   };
+
   return (
     <TooltipProvider>
       <Tooltip>
