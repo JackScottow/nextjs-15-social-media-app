@@ -1,11 +1,16 @@
 import { validateRequest } from "@/auth";
 import prisma from "@/lib/prisma";
-import { createUploadthing, FileRouter } from "uploadthing/next";
+import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError, UTApi } from "uploadthing/server";
+
 const f = createUploadthing();
+
 export const fileRouter = {
   avatar: f({
-    image: { maxFileSize: "512KB" },
+    image: {
+      maxFileSize: "512KB",
+      maxFileCount: 1,
+    },
   })
     .middleware(async () => {
       const { user } = await validateRequest();
@@ -14,23 +19,25 @@ export const fileRouter = {
     })
     .onUploadComplete(async ({ metadata, file }) => {
       const oldAvatarUrl = metadata.user.avatarUrl;
+
       if (oldAvatarUrl) {
-        const key = oldAvatarUrl.split(
-          `/a/${process.env.NEXT_PUBLIC_UPLOADTHING_APP_ID}/`,
-        )[1];
-        await new UTApi().deleteFiles(key);
+        // Extract key from the URL - new v7 format
+        const key = oldAvatarUrl.split("/").pop();
+        if (key) {
+          await new UTApi().deleteFiles(key);
+        }
       }
-      const newAvatarUrl = file.url.replace(
-        "/f/",
-        `/a/${process.env.NEXT_PUBLIC_UPLOADTHING_APP_ID}/`,
-      );
+
+      // No need to transform URLs in v7
       await prisma.user.update({
         where: { id: metadata.user.id },
         data: {
-          avatarUrl: newAvatarUrl,
+          avatarUrl: file.url,
         },
       });
-      return { avatarUrl: newAvatarUrl };
+
+      return { avatarUrl: file.url };
     }),
 } satisfies FileRouter;
+
 export type AppFileRouter = typeof fileRouter;

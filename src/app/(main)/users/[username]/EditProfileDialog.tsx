@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import Image, { StaticImageData } from "next/image";
+import { useToast } from "@/hooks/use-toast";
 
 // UI Components
 import {
@@ -41,6 +42,7 @@ import { useUpdateProfileMutation } from "./mutations";
 
 // Utilities
 import Resizer from "react-image-file-resizer";
+
 interface EditProfileDialogProps {
   user: UserData;
   open: boolean;
@@ -61,25 +63,26 @@ const EditProfileDialog = ({
   });
 
   const mutation = useUpdateProfileMutation();
-
   const [croppedAvatar, setCroppedAvatar] = useState<Blob | null>(null);
 
   const onSubmit = async (values: UpdateUserProfileValues) => {
-    const newAvatarFile = croppedAvatar
-      ? new File([croppedAvatar], `avatar_${user.id}.webp`)
-      : undefined;
-    mutation.mutate(
-      {
+    try {
+      const newAvatarFile = croppedAvatar
+        ? new File([croppedAvatar], `avatar_${user.id}.webp`, {
+            type: "image/webp",
+          })
+        : undefined;
+
+      await mutation.mutateAsync({
         values,
         avatar: newAvatarFile,
-      },
-      {
-        onSuccess: () => {
-          setCroppedAvatar(null);
-          onOpenChange(false);
-        },
-      },
-    );
+      });
+
+      setCroppedAvatar(null);
+      onOpenChange(false);
+    } catch (error) {
+      console.error("Profile update error:", error);
+    }
   };
 
   return (
@@ -97,6 +100,7 @@ const EditProfileDialog = ({
                 : user.avatarUrl || avatarPlaceholder
             }
             onImageCropped={setCroppedAvatar}
+            isLoading={mutation.isPending}
           />
         </div>
         <Form {...form}>
@@ -108,7 +112,11 @@ const EditProfileDialog = ({
                 <FormItem>
                   <FormLabel>Display Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Your display name" {...field} />
+                    <Input
+                      placeholder="Your display name"
+                      {...field}
+                      disabled={mutation.isPending}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -125,6 +133,7 @@ const EditProfileDialog = ({
                       placeholder="Tell us about yourself"
                       className="resize-none"
                       {...field}
+                      disabled={mutation.isPending}
                     />
                   </FormControl>
                   <FormMessage />
@@ -132,7 +141,11 @@ const EditProfileDialog = ({
               )}
             />
             <DialogFooter>
-              <LoadingButton type="submit" loading={mutation.isPending}>
+              <LoadingButton
+                type="submit"
+                loading={mutation.isPending}
+                disabled={mutation.isPending}
+              >
                 Save
               </LoadingButton>
             </DialogFooter>
@@ -146,27 +159,47 @@ const EditProfileDialog = ({
 interface AvatarInputProps {
   src: string | StaticImageData;
   onImageCropped: (blob: Blob | null) => void;
+  isLoading?: boolean;
 }
 
-const AvatarInput = ({ src, onImageCropped }: AvatarInputProps) => {
+const AvatarInput = ({ src, onImageCropped, isLoading }: AvatarInputProps) => {
   const [imageToCrop, setImageToCrop] = useState<File>();
-
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
 
   const onImageSelected = (image: File | undefined) => {
     if (!image) return;
 
+    // Validate file type
+    if (!image.type.startsWith("image/")) {
+      toast({
+        variant: "destructive",
+        description: "Please select an image file.",
+      });
+      return;
+    }
+
     Resizer.imageFileResizer(
       image,
-      1024,
-      1024,
+      512, // width
+      512, // height
       "WEBP",
-      100,
-      0,
-      (uri) => setImageToCrop(uri as File),
+      90, // quality
+      0, // rotation
+      (uri) => {
+        if (uri instanceof File && uri.size > 512 * 1024) {
+          toast({
+            variant: "destructive",
+            description: "Image too large. Please choose a smaller image.",
+          });
+          return;
+        }
+        setImageToCrop(uri as File);
+      },
       "file",
     );
   };
+
   return (
     <>
       <input
@@ -175,11 +208,13 @@ const AvatarInput = ({ src, onImageCropped }: AvatarInputProps) => {
         onChange={(e) => onImageSelected(e.target.files?.[0])}
         ref={fileInputRef}
         className="sr-only hidden"
+        disabled={isLoading}
       />
       <button
         type="button"
         onClick={() => fileInputRef.current?.click()}
         className="group relative block"
+        disabled={isLoading}
       >
         <Image
           src={src}
@@ -189,7 +224,11 @@ const AvatarInput = ({ src, onImageCropped }: AvatarInputProps) => {
           className="size-32 flex-none rounded-full object-cover"
         />
         <span className="absolute inset-0 m-auto flex size-12 items-center justify-center rounded-full bg-black bg-opacity-30 text-white transition-colors duration-200 group-hover:bg-opacity-25">
-          <Camera size={24} />
+          {isLoading ? (
+            <div className="size-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+          ) : (
+            <Camera size={24} />
+          )}
         </span>
       </button>
       {imageToCrop && (
@@ -208,4 +247,5 @@ const AvatarInput = ({ src, onImageCropped }: AvatarInputProps) => {
     </>
   );
 };
+
 export default EditProfileDialog;

@@ -26,24 +26,34 @@ export const useUpdateProfileMutation = () => {
       avatar?: File;
     }) => {
       try {
-        return Promise.all([
+        // Handle profile update and avatar upload in parallel
+        const results = await Promise.all([
           updateUserProfile(values),
-          avatar ? await startAvatarUpload([avatar]) : undefined,
+          avatar ? startAvatarUpload([avatar]) : Promise.resolve(undefined),
         ]);
+
+        const [updatedUser, uploadResult] = results;
+        const avatarUrl = uploadResult?.[0]?.url;
+
+        return {
+          user: updatedUser,
+          avatarUrl,
+        };
       } catch (error) {
-        console.error("Error during upload:", error);
+        console.error("Error during update:", error);
         throw error;
       }
     },
-    onSuccess: async ([updatedUser, uploadResult]) => {
-      const newAvatarUrl = uploadResult?.[0].serverData.avatarUrl;
 
+    onSuccess: async ({ user: updatedUser, avatarUrl }) => {
+      // Update feed posts
       const queryFilter: QueryFilters = {
         queryKey: ["post-feed"],
       };
 
       await queryClient.cancelQueries(queryFilter);
 
+      // Update all instances of the user in the feed
       queryClient.setQueriesData<InfiniteData<PostsPage, string | null>>(
         queryFilter,
         (oldData) => {
@@ -59,7 +69,8 @@ export const useUpdateProfileMutation = () => {
                     ...post,
                     user: {
                       ...updatedUser,
-                      avatarUrl: newAvatarUrl || updatedUser.avatarUrl,
+                      // Use new avatar URL if available, else keep existing
+                      avatarUrl: avatarUrl || updatedUser.avatarUrl,
                     },
                   };
                 }
@@ -70,12 +81,17 @@ export const useUpdateProfileMutation = () => {
         },
       );
 
-      router.refresh();
+      // Invalidate user queries
+      await queryClient.invalidateQueries({
+        queryKey: ["user", updatedUser.username],
+      });
 
+      router.refresh();
       toast({ description: "Profile updated" });
     },
 
     onError(error) {
+      console.error("Update error:", error);
       toast({
         variant: "destructive",
         description: "Failed to update profile",
