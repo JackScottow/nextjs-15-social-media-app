@@ -18,5 +18,12 @@ export const loginSchema = z.object({
 export type LoginValues = z.infer<typeof loginSchema>;
 
 export const createPostschema = z.object({
-  content:requiredString
-})
+  content: requiredString,
+});
+
+export const updateUserProfileSchema = z.object({
+  displayName: requiredString,
+  bio: z.string().max(1000, "Must be 1000 characters or less"),
+});
+
+export type UpdateUserProfileValues = z.infer<typeof updateUserProfileSchema>;
