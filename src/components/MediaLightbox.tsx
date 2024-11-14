@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { MediaType } from "@prisma/client";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface MediaLightboxProps {
   media: {
@@ -25,6 +25,11 @@ export default function MediaLightbox({
   onOpenChange,
 }: MediaLightboxProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
+
+  useEffect(() => {
+    setCurrentIndex(initialIndex);
+  }, [initialIndex]);
+
   const currentMedia = media[currentIndex];
 
   const showNext = () => {
@@ -36,53 +41,52 @@ export default function MediaLightbox({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="h-screen max-h-screen max-w-screen-lg border-none bg-transparent p-0 shadow-none">
+    <Dialog modal open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="h-[100dvh] max-h-[100dvh] w-full max-w-none border-none bg-black/80 p-0 backdrop-blur-sm md:p-6">
         <div className="relative flex h-full w-full items-center justify-center">
           {media.length > 1 && (
             <>
               <button
                 onClick={showPrevious}
-                className="absolute left-4 z-50 rounded-full bg-background/80 p-2 text-foreground backdrop-blur-sm transition-colors hover:bg-background"
+                className="absolute left-2 z-50 rounded-full bg-background/80 p-2 text-foreground backdrop-blur-sm transition-colors hover:bg-background md:left-8"
               >
                 <ChevronLeft className="size-6" />
               </button>
               <button
                 onClick={showNext}
-                className="absolute right-4 z-50 rounded-full bg-background/80 p-2 text-foreground backdrop-blur-sm transition-colors hover:bg-background"
+                className="absolute right-2 z-50 rounded-full bg-background/80 p-2 text-foreground backdrop-blur-sm transition-colors hover:bg-background md:right-8"
               >
                 <ChevronRight className="size-6" />
               </button>
             </>
           )}
-          <button
-            onClick={() => onOpenChange(false)}
-            className="absolute right-4 top-4 z-50 rounded-full bg-background/80 p-2 text-foreground backdrop-blur-sm transition-colors hover:bg-background"
-          >
-            <X className="size-6" />
-          </button>
-          <div className="flex h-full w-full items-center justify-center p-4">
+
+          <div className="h-full w-full p-2 md:p-0">
             {currentMedia.type === MediaType.IMAGE ? (
-              <div className="relative h-full max-h-[80vh] w-full">
+              <div className="relative flex h-full items-center justify-center">
                 <Image
                   src={currentMedia.url}
                   alt=""
-                  fill
-                  className="object-contain"
-                  sizes="(max-width: 768px) 100vw, 80vw"
+                  width={1920}
+                  height={1080}
+                  className="max-h-[85vh] w-auto rounded object-contain"
                   priority
                 />
               </div>
             ) : (
-              <video
-                src={currentMedia.url}
-                controls
-                autoPlay
-                className="mx-auto h-full max-h-[80vh] w-full"
-              />
+              <div className="flex h-full items-center justify-center">
+                <video
+                  src={currentMedia.url}
+                  controls
+                  autoPlay
+                  playsInline
+                  className="max-h-[85vh] w-auto rounded"
+                />
+              </div>
             )}
           </div>
         </div>
+
         {media.length > 1 && (
           <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
             {media.map((m, i) => (
