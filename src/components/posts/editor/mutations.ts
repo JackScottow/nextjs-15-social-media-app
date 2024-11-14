@@ -9,15 +9,21 @@ import { submitPost } from "./actions";
 import { PostsPage } from "@/lib/types";
 import { useSession } from "@/app/(main)/SessionProvider";
 
+interface SubmitPostData {
+  content: string;
+  mediaIds: string[];
+}
+
 export const useSubmitPostMutation = () => {
   const { toast } = useToast();
-
   const queryClient = useQueryClient();
-
   const { user } = useSession();
 
   const mutation = useMutation({
-    mutationFn: submitPost,
+    mutationFn: async (data: SubmitPostData) => {
+      return submitPost(data);
+    },
+
     onSuccess: async (newPost) => {
       const queryFilter = {
         queryKey: ["post-feed"],
@@ -58,7 +64,7 @@ export const useSubmitPostMutation = () => {
         },
       });
 
-      toast({ description: "Sucessfully posted!", duration: 1500 });
+      toast({ description: "Successfully posted!", duration: 1500 });
     },
 
     onError(error) {

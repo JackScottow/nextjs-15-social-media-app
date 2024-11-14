@@ -2,21 +2,33 @@
 import { validateRequest } from "@/auth";
 import prisma from "@/lib/prisma";
 import { getPostDataInclude } from "@/lib/types";
-import { createPostschema } from "@/lib/validation";
+import { createPostSchema } from "@/lib/validation";
 
-export const submitPost = async (input: string) => {
+interface PostInput {
+  content: string;
+  mediaIds: string[];
+}
+
+export const submitPost = async ({ content, mediaIds }: PostInput) => {
   const { user } = await validateRequest();
 
   if (!user) throw Error("Unauthorised");
 
-  const { content } = createPostschema.parse({ content: input });
+  const validatedData = createPostSchema.parse({ content, mediaIds });
 
   const newPost = await prisma.post.create({
     data: {
-      content,
+      content: validatedData.content,
       userId: user.id,
+      attachments: {
+        connect: mediaIds.map((id) => ({ id })),
+      },
     },
-    include: getPostDataInclude(user.id),
+    include: {
+      ...getPostDataInclude(user.id),
+      attachments: true,
+    },
   });
+
   return newPost;
 };

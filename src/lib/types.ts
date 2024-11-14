@@ -1,4 +1,5 @@
-import { Prisma } from "@prisma/client";
+import { MediaType, Prisma } from "@prisma/client";
+
 export const getUserDataSelect = (loggedInUserId: string) => {
   return {
     id: true,
@@ -23,6 +24,14 @@ export const getPostDataInclude = (loggedInUserId: string) => {
   return {
     user: {
       select: getUserDataSelect(loggedInUserId),
+    },
+    attachments: {
+      select: {
+        id: true,
+        type: true,
+        url: true,
+        createdAt: true,
+      },
     },
   } satisfies Prisma.PostInclude;
 };

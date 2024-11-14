@@ -17,9 +17,23 @@ export const loginSchema = z.object({
 
 export type LoginValues = z.infer<typeof loginSchema>;
 
-export const createPostschema = z.object({
-  content: requiredString,
-});
+export const createPostSchema = z
+  .object({
+    content: z.string().trim(),
+    mediaIds: z
+      .array(z.string())
+      .max(5, "Cannot have more than 5 attachments")
+      .optional(),
+  })
+  .refine(
+    (data) =>
+      data.content.length > 0 || (data.mediaIds && data.mediaIds.length > 0),
+    {
+      message: "Post must have either text or media",
+    },
+  );
+
+export type CreatePostValues = z.infer<typeof createPostSchema>;
 
 export const updateUserProfileSchema = z.object({
   displayName: requiredString,
