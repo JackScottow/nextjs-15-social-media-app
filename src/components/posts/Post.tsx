@@ -77,7 +77,7 @@ function MediaPreviews({ attachments }: MediaPreviewsProps) {
     <>
       <div
         className={cn(
-          "grid gap-3",
+          "m-3 grid gap-2 py-3",
           attachments.length > 1 ? "grid-cols-2" : "grid-cols-1",
         )}
       >
@@ -113,8 +113,9 @@ function MediaPreview({ media, onClick }: MediaPreviewProps) {
           <Image
             src={media.url}
             alt="Attachment"
-            fill
             className="cursor-zoom-in rounded object-cover"
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw"
           />
         </div>
       </div>
