@@ -3,13 +3,16 @@
 import { useSession } from "@/app/(main)/SessionProvider";
 import { PostData } from "@/lib/types";
 import { cn, formatRelativeDate } from "@/lib/utils";
-import { Media, MediaType } from "@prisma/client"; // Import MediaType too
+import { Media, MediaType } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import Linkify from "../Linkify";
 import UserAvatar from "../UserAvatar";
 import UserTooltip from "../UserTooltip";
 import PostMoreButton from "./PostMoreButton";
+import { useState } from "react";
+import MediaLightbox from "../MediaLightbox";
+import { Play } from "lucide-react";
 
 interface PostProps {
   post: PostData;
@@ -56,7 +59,6 @@ export default function Post({ post }: PostProps) {
   );
 }
 
-// Create a type for the media attachment that matches what we get from the API
 type MediaAttachment = Pick<Media, "id" | "type" | "url" | "createdAt">;
 
 interface MediaPreviewsProps {
@@ -65,44 +67,77 @@ interface MediaPreviewsProps {
 
 interface MediaPreviewProps {
   media: MediaAttachment;
+  onClick?: () => void;
 }
 
 function MediaPreviews({ attachments }: MediaPreviewsProps) {
+  const [selectedIndex, setSelectedIndex] = useState<number>();
+
   return (
-    <div
-      className={cn(
-        "flex flex-col gap-3",
-        attachments.length > 1 && "sm:grid sm:grid-cols-2",
-      )}
-    >
-      {attachments.map((m) => (
-        <MediaPreview key={m.id} media={m} />
-      ))}
-    </div>
+    <>
+      <div
+        className={cn(
+          "grid gap-3",
+          attachments.length > 1 ? "grid-cols-2" : "grid-cols-1",
+        )}
+      >
+        {attachments.map((m, index) => (
+          <MediaPreview
+            key={m.id}
+            media={m}
+            onClick={() => setSelectedIndex(index)}
+          />
+        ))}
+      </div>
+
+      <MediaLightbox
+        media={attachments}
+        initialIndex={selectedIndex ?? 0}
+        open={selectedIndex !== undefined}
+        onOpenChange={(open) => {
+          if (!open) setSelectedIndex(undefined);
+        }}
+      />
+    </>
   );
 }
 
-function MediaPreview({ media }: MediaPreviewProps) {
+function MediaPreview({ media, onClick }: MediaPreviewProps) {
   if (media.type === MediaType.IMAGE) {
     return (
-      <Image
-        src={media.url}
-        alt="Attachment"
-        width={500}
-        height={500}
-        className="mx-auto aspect-square rounded object-cover hover:cursor-zoom-in"
-      />
+      <div
+        onClick={onClick}
+        className="mx-auto w-full max-w-2xl overflow-hidden"
+      >
+        <div className="relative aspect-square">
+          <Image
+            src={media.url}
+            alt="Attachment"
+            fill
+            className="cursor-zoom-in rounded object-cover"
+          />
+        </div>
+      </div>
     );
   }
 
   if (media.type === MediaType.VIDEO) {
     return (
-      <div>
-        <video
-          src={media.url}
-          controls
-          className="mx-auto size-fit max-h-[30rem] rounded"
-        />
+      <div
+        onClick={onClick}
+        className="mx-auto w-full max-w-2xl overflow-hidden"
+      >
+        <div className="relative aspect-square">
+          <video
+            src={media.url}
+            className="absolute inset-0 h-full w-full rounded object-cover"
+          />
+          <div className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/10 transition-colors hover:bg-black/20">
+            <div className="rounded-full bg-black/50 p-3">
+              <Play className="h-8 w-8 text-white" fill="currentColor" />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
