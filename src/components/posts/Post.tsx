@@ -13,6 +13,7 @@ import PostMoreButton from "./PostMoreButton";
 import { useState } from "react";
 import MediaLightbox from "../MediaLightbox";
 import { Play } from "lucide-react";
+import LikeButton from "@/components/posts/LikeButton";
 
 interface PostProps {
   post: PostData;
@@ -56,6 +57,14 @@ export default function Post({ post }: PostProps) {
       {!!post.attachments.length && (
         <MediaPreviews attachments={post.attachments} />
       )}
+      <hr className="text-muted-foreground" />
+      <LikeButton
+        postId={post.id}
+        initialState={{
+          likes: post._count.likes,
+          isLikedByUser: post.likes.some((like) => like.userId === user.id),
+        }}
+      />
     </article>
   );
 }
