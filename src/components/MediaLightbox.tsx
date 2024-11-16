@@ -45,7 +45,10 @@ export default function MediaLightbox({
     <Dialog modal open={open} onOpenChange={onOpenChange}>
       <DialogHeader>
         <DialogTitle>
-          <DialogContent className="h-[100dvh] max-h-[100dvh] w-full max-w-none border-none bg-black/80 p-0 backdrop-blur-sm md:p-6">
+          <DialogContent
+            className="h-[100dvh] max-h-[100dvh] w-full max-w-none border-none bg-black/80 p-0 backdrop-blur-sm md:p-6"
+            aria-describedby={undefined}
+          >
             <div className="relative flex h-full w-full items-center justify-center">
               {media.length > 1 && (
                 <>
