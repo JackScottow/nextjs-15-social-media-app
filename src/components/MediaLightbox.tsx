@@ -51,13 +51,13 @@ export default function MediaLightbox({
                 <>
                   <button
                     onClick={showPrevious}
-                    className="absolute left-2 z-50 rounded-xl bg-background/80 p-1 text-foreground backdrop-blur-sm transition-colors hover:bg-background md:left-8"
+                    className="absolute left-2 z-50 rounded-xl p-1 text-white md:left-8"
                   >
                     <ChevronLeft className="size-8" />
                   </button>
                   <button
                     onClick={showNext}
-                    className="absolute right-2 z-50 rounded-xl bg-background/80 p-1 text-foreground backdrop-blur-sm transition-colors hover:bg-background md:right-8"
+                    className="absolute right-2 z-50 rounded-xl p-1 text-white md:right-8"
                   >
                     <ChevronRight className="size-8" />
                   </button>
@@ -89,21 +89,6 @@ export default function MediaLightbox({
                 )}
               </div>
             </div>
-
-            {media.length > 1 && (
-              <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
-                {media.map((m, i) => (
-                  <button
-                    key={m.id}
-                    onClick={() => setCurrentIndex(i)}
-                    className={cn(
-                      "h-2 w-2 rounded-full bg-background/80 backdrop-blur-sm transition-all",
-                      i === currentIndex && "w-4 bg-background",
-                    )}
-                  />
-                ))}
-              </div>
-            )}
           </DialogContent>
         </DialogTitle>
       </DialogHeader>
