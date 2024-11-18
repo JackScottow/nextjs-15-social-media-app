@@ -36,6 +36,9 @@ export default function LikeButton({ postId, initialState }: LikeButtonProps) {
         ? kyInstance.delete(`/api/posts/${postId}/likes`)
         : kyInstance.post(`/api/posts/${postId}/likes`),
     onMutate: async () => {
+      toast({
+        description: `Post ${data.isLikedByUser ? "un" : ""}liked`,
+      });
       await queryClient.cancelQueries({ queryKey });
 
       const previousState = queryClient.getQueryData<LikeInfo>(queryKey);

@@ -8,14 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
-import {
-  MoreHorizontal,
-  Share,
-  Share2,
-  Trash2,
-  UserPlus,
-  UserPlus2,
-} from "lucide-react";
+import { MoreHorizontal, Share, Trash2, UserPlus2 } from "lucide-react";
 
 interface PostMoreButtonProps {
   post: PostData;
@@ -30,7 +23,7 @@ const PostMoreButton = ({ post, className, owner }: PostMoreButtonProps) => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "Check out this post!",
+          title: "Check out this post on NextBook!",
           text: "I found this great post for you to read.",
           url: window.location.href, // or any specific URL you want to share
         });
