@@ -16,7 +16,7 @@ const PostsLoadingSkeleton = () => {
 
 const PostLoadingSkeleton = () => {
   return (
-    <div className="w-full animate-pulse space-y-3 rounded-md bg-card p-5 shadow-sm">
+    <div className="w-full animate-pulse space-y-3 rounded bg-card p-5 shadow">
       <div className="flex flex-wrap gap-3">
         <Skeleton className="size-12 rounded-full" />
         <div className="space-y-1.5">

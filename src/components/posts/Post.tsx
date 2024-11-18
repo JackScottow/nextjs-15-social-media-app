@@ -24,7 +24,7 @@ export default function Post({ post }: PostProps) {
   const { user } = useSession();
 
   return (
-    <article className="group/post space-y-3 rounded bg-card p-3 shadow-sm">
+    <article className="group/post space-y-3 rounded bg-card p-3 shadow">
       <div className="flex justify-between gap-3">
         <div className="flex flex-wrap gap-3">
           <UserTooltip user={post.user}>

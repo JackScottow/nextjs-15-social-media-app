@@ -54,13 +54,13 @@ export default function MediaLightbox({
                 <>
                   <button
                     onClick={showPrevious}
-                    className="absolute left-2 z-50 rounded-xl p-1 text-white md:left-8"
+                    className="absolute left-2 z-50 rounded p-1 text-white md:left-8"
                   >
                     <ChevronLeft className="size-8" />
                   </button>
                   <button
                     onClick={showNext}
-                    className="absolute right-2 z-50 rounded-xl p-1 text-white md:right-8"
+                    className="absolute right-2 z-50 rounded p-1 text-white md:right-8"
                   >
                     <ChevronRight className="size-8" />
                   </button>
