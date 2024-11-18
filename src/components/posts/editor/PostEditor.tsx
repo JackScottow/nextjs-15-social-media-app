@@ -133,7 +133,7 @@ function AddAttachmentsButton({
       <Button
         variant="ghost"
         size="icon"
-        className="text-primary hover:text-primary"
+        className="text-primary hover:text-white"
         disabled={disabled}
         onClick={() => fileInputRef.current?.click()}
       >
