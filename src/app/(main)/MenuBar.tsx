@@ -11,48 +11,48 @@ const MenuBar = ({ className }: MenuBarProps) => {
     <div className={className}>
       <Button
         variant="ghost"
-        className="flex items-center justify-start gap-4"
+        className="flex justify-start"
         title="Home"
         asChild
       >
         <Link href="/">
-          <Home />
+          <Home className="lg:mr-4" />
           <span className="hidden lg:inline">Home</span>
         </Link>
       </Button>
 
       <Button
         variant="ghost"
-        className="flex items-center justify-start gap-4"
+        className="flex justify-start"
         title="Notifications"
         asChild
       >
         <Link href="/notifications">
-          <Bell />
+          <Bell className="lg:mr-4" />
           <span className="hidden lg:inline">Notifications</span>
         </Link>
       </Button>
 
       <Button
         variant="ghost"
-        className="flex items-center justify-start gap-4"
+        className="flex justify-start"
         title="Messages"
         asChild
       >
         <Link href="/messages">
-          <Mail />
+          <Mail className="lg:mr-4" />
           <span className="hidden lg:inline">Messages</span>
         </Link>
       </Button>
 
       <Button
         variant="ghost"
-        className="flex items-center justify-start gap-4"
+        className="flex justify-start"
         title="Bookmarks"
         asChild
       >
         <Link href="/bookmarks">
-          <Bookmark />
+          <Bookmark className="lg:mr-4" />
           <span className="hidden lg:inline">Bookmarks</span>
         </Link>
       </Button>
